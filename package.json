@@ -1,0 +1,33 @@
+{
+  "name": "aws-shared-infra",
+  "version": "1.0.0",
+  "description": "Account-level, cross-cutting AWS IAM (OIDC providers + CI federation roles) as Pulumi IaC.",
+  "license": "MIT",
+  "author": "Adam Jones (domdomegg)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/domdomegg/aws-shared-infra.git"
+  },
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --watch",
+    "lint": "eslint",
+    "build": "tsc --project tsconfig.build.json",
+    "preview": "PULUMI_CONFIG_PASSPHRASE=unused pulumi preview --stack prod",
+    "deploy:prod": "PULUMI_CONFIG_PASSPHRASE=unused pulumi up --stack prod --yes"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^7.35.0",
+    "@pulumi/pulumi": "^3.250.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node-lts": "^22.0.2",
+    "eslint": "^9.32.0",
+    "eslint-config-domdomegg": "^2.0.9",
+    "tsconfig-domdomegg": "^1.0.0",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.0"
+  }
+}

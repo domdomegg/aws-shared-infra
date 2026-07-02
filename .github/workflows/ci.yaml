@@ -1,0 +1,61 @@
+name: CI/CD
+
+on: push
+
+permissions:
+  id-token: write   # mint the GitHub OIDC token used to assume the AWS role
+  contents: read
+
+jobs:
+  ci_cd:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node-version: [20]
+    env:
+      CI: true
+    steps:
+      - name: Checkout ${{ github.sha }}
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+      - name: Install Pulumi
+        run: |
+          curl -fsSL https://get.pulumi.com | sh
+          echo "$HOME/.pulumi/bin" >> "$GITHUB_PATH"
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint --if-present
+      - name: Build
+        run: npm run build --if-present
+      - name: Test
+        run: npm run test --if-present
+
+      # Federated AWS access — no stored secrets. Assumes the aws-shared-infra-ci
+      # role, which this repo manages itself. That role was created by a one-time
+      # human `pulumi up`; if it's ever missing (e.g. account rebuild), re-run
+      # that manual apply before relying on CI.
+      - name: Configure AWS credentials (OIDC)
+        if: github.ref == 'refs/heads/master'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::338337944728:role/aws-shared-infra-ci
+          aws-region: eu-west-1
+      - name: Pulumi login
+        if: github.ref == 'refs/heads/master'
+        run: pulumi login s3://domdomegg-pulumi-backend/aws-shared-infra
+      - id: later_runs_check
+        name: Check for later runs
+        uses: fkirc/skip-duplicate-actions@v5.3.1
+        with:
+          cancel_others: false
+          skip_after_successful_duplicate: false
+          concurrent_skipping: outdated_runs
+      - name: Deploy
+        if: ${{ github.ref == 'refs/heads/master' && steps.later_runs_check.outputs.should_skip != 'true' }}
+        run: npm run deploy:prod

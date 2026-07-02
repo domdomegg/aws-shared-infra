@@ -1,0 +1,3 @@
+name: aws-shared-infra
+runtime: nodejs
+description: Account-level, cross-cutting AWS IAM (OIDC providers + CI federation role). App-scoped IAM lives with its app.
