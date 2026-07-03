@@ -106,3 +106,5 @@ export const shrolebotCiRole = serverlessCiRole('shrolebot');
 export const odirCiRole = serverlessCiRole('odir');
 export const analyticsLambdaCiRole = serverlessCiRole('analytics-lambda');
 export const dealerTechCiRole = serverlessCiRole('dealer-tech');
+export const pruverCiRole = serverlessCiRole('pruver');
+export const postalVoteCiRole = serverlessCiRole('postal-vote');
