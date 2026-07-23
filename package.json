@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@pulumi/aws": "^7.35.0",
-    "@pulumi/pulumi": "^3.250.0"
+    "@pulumi/pulumi": "^3.254.0"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "^22.0.2",
