@@ -82,6 +82,8 @@ new aws.iam.RolePolicy('homelab-ci-app-iam', {
 					'iam:ListRoleTags',
 					'iam:ListRolePolicies',
 					'iam:ListAttachedRolePolicies',
+					// Read-only; the AWS provider checks for instance profiles before DeleteRole.
+					'iam:ListInstanceProfilesForRole',
 					'iam:GetRolePolicy',
 					'iam:PutRolePolicy',
 					'iam:DeleteRolePolicy',
