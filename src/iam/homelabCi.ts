@@ -82,6 +82,7 @@ new aws.iam.RolePolicy('homelab-ci-app-iam', {
 					'iam:ListRoleTags',
 					'iam:ListRolePolicies',
 					'iam:ListAttachedRolePolicies',
+					'iam:ListInstanceProfilesForRole',
 					'iam:GetRolePolicy',
 					'iam:PutRolePolicy',
 					'iam:DeleteRolePolicy',
